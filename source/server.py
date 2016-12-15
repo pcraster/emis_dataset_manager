@@ -1,5 +1,5 @@
 import os
-from domain import create_app
+from dataset_manager import create_app
 
 
 app = create_app(os.getenv("EMIS_DATA_MANAGER_CONFIGURATION"))

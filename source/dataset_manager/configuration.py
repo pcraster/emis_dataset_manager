@@ -4,10 +4,10 @@ import tempfile
 
 class Configuration:
 
-    # Flask
-    SECRET_KEY = os.environ.get("EMIS_DATA_MANAGER_SECRET_KEY") or \
-        "yabbadabbadoo!"
-    JSON_AS_ASCII = False
+    EMIS_PROPERTY_DATA = os.environ.get("EMIS_PROPERTY_DATA") or \
+        tempfile.gettempdir()
+
+    EMIS_PROPERTY_HOST = "property"
 
 
     @staticmethod
@@ -18,30 +18,17 @@ class Configuration:
 
 class DevelopmentConfiguration(Configuration):
 
-    DEBUG = True
-    DEBUG_TOOLBAR_ENABLED = True
-    FLASK_DEBUG_DISABLE_STRICT = True
-
-
-    @staticmethod
-    def init_app(
-            app):
-        Configuration.init_app(app)
-
-        from flask_debug import Debug
-        Debug(app)
+    EMIS_PROPERTY_PORT = 5000
 
 
 class TestingConfiguration(Configuration):
 
-    SERVER_NAME = os.environ.get("EMIS_DATA_MANAGER_SERVER_NAME") or \
-        "localhost"
-    TESTING = True
+    EMIS_PROPERTY_PORT = 5000
 
 
 class ProductionConfiguration(Configuration):
 
-    pass
+    EMIS_PROPERTY_PORT = 3031
 
 
 configuration = {
