@@ -4,6 +4,9 @@ import tempfile
 
 class Configuration:
 
+    EMIS_RABBITMQ_DEFAULT_USER = os.environ.get("EMIS_RABBITMQ_DEFAULT_USER")
+    EMIS_RABBITMQ_DEFAULT_PASS = os.environ.get("EMIS_RABBITMQ_DEFAULT_PASS")
+    EMIS_RABBITMQ_DEFAULT_VHOST = os.environ.get("EMIS_RABBITMQ_DEFAULT_VHOST")
     EMIS_PROPERTY_DATA = os.environ.get("EMIS_PROPERTY_DATA") or \
         tempfile.gettempdir()
 
