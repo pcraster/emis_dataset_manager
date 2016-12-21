@@ -1,9 +1,11 @@
+import json
 import sys
 import time
+import traceback
 from flask import Config
 import pika
-import requests
 from .configuration import configuration
+from .manage_dataset import scan
 
 
 class DataManager(object):
@@ -25,19 +27,36 @@ class DataManager(object):
             method_frame,
             header_frame,
             body):
-        sys.stdout.write("received message: {}".format(body))
+        sys.stdout.write("received message: {}\n".format(body))
         sys.stdout.flush()
 
-        # For now, post an example to the property service.
-        payload = {
-            "name": "my_name1",
-            "pathname": "my_pathname1"
-        }
-        uri = self.properties_uri("properties")
-        response = requests.post(uri, json={"property": payload})
+        try:
+            body = body.decode("utf-8")
+            sys.stdout.flush()
+            data = json.loads(body)
+            uri = self.properties_uri("properties")
+            pathnames = data["pathnames"]
+            rewrite = data["rewrite"]
 
-        # TODO Handle errors.
-        assert response.status_code == 201, response.text
+            scan(uri, pathnames, rewrite)
+
+
+            ### # For now, post an example to the property service.
+            ### payload = {
+            ###     "name": "my_name1",
+            ###     "pathname": "my_pathname1"
+            ### }
+            ### uri = self.properties_uri("properties")
+            ### response = requests.post(uri, json={"property": payload})
+
+            ### # TODO Handle errors.
+            ### assert response.status_code == 201, response.text
+
+        except Exception as exception:
+
+            sys.stderr.write("{}\n".format(traceback.format_exc(exception)));
+            sys.stderr.flush()
+
 
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
@@ -65,13 +84,13 @@ class DataManager(object):
             queue="scan")
 
         try:
-            sys.stdout.write("Start consuming...")
+            sys.stdout.write("Start consuming...\n")
             sys.stdout.flush()
             self.channel.start_consuming()
         except KeyboardInterrupt:
             self.channel.stop_consuming()
 
-        sys.stdout.write("Close connection...")
+        sys.stdout.write("Close connection...\n")
         sys.stdout.flush()
         self.connection.close()
 
