@@ -36,21 +36,10 @@ class DataManager(object):
             data = json.loads(body)
             uri = self.properties_uri("properties")
             pathnames = data["pathnames"]
-            rewrite = data["rewrite"]
+            rewrite = data["rewrite"].split(":") if "rewrite" in data else None
+            assert rewrite is None or len(rewrite) == 2, rewrite
 
             scan(uri, pathnames, rewrite)
-
-
-            ### # For now, post an example to the property service.
-            ### payload = {
-            ###     "name": "my_name1",
-            ###     "pathname": "my_pathname1"
-            ### }
-            ### uri = self.properties_uri("properties")
-            ### response = requests.post(uri, json={"property": payload})
-
-            ### # TODO Handle errors.
-            ### assert response.status_code == 201, response.text
 
         except Exception as exception:
 

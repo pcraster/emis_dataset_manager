@@ -25,6 +25,12 @@ class Property(object):
             return "Property({}, {})".format(
                 self.dataset_pathname, self.property_pathname)
 
+    def __eq__(self,
+            other):
+        return \
+            self.dataset_pathname == other.dataset_pathname and \
+            self.property_pathname == other.property_pathname
+
 
 def scan_phenomena_for_properties(
         phenomena):
@@ -121,6 +127,24 @@ def add_property(
         raise RuntimeError(response.json()["message"])
 
 
+def rewrite_pathnames(
+        properties,
+        rewrite_path):
+    """
+    Rewrite pathnames *in-place*
+    """
+
+    if rewrite_path is not None and rewrite_path:
+        assert len(rewrite_path) == 2, rewrite_path
+
+        for property in properties:
+            if property.dataset_pathname.startswith(rewrite_path[0]):
+                property.dataset_pathname = property.dataset_pathname.replace(
+                    rewrite_path[0], rewrite_path[1])
+
+    return properties
+
+
 def scan(
         uri,
         pathnames,
@@ -131,15 +155,7 @@ def scan(
     for pathname in pathnames:
         properties += scan_for_properties(pathname)
 
-
-    print(rewrite_path)
-    if rewrite_path is not None and rewrite_path:
-        for property in properties:
-            if property.dataset_pathname.startswith(rewrite_path[0]):
-                property.dataset_pathname = property.dataset_pathname.replace(
-                    rewrite_path[0], rewrite_path[1])
-
-
+    properties = rewrite_pathnames(properties, rewrite_path)
     response = requests.get(uri)
 
     if response.status_code != 200:
