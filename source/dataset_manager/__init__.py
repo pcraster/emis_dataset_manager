@@ -1,6 +1,5 @@
 import json
 import sys
-import time
 import traceback
 from flask import Config
 import pika
@@ -32,7 +31,6 @@ class DataManager(object):
 
         try:
             body = body.decode("utf-8")
-            sys.stdout.flush()
             data = json.loads(body)
             uri = self.properties_uri("properties")
             pathnames = data["pathnames"]
