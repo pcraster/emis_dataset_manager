@@ -3,7 +3,7 @@ import unittest
 from dataset_manager.manage_dataset.scan import Property, rewrite_pathnames
 
 
-class AppTest(unittest.TestCase):
+class ScanTest(unittest.TestCase):
 
     def setUp(self):
         pass
