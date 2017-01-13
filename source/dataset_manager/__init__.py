@@ -15,6 +15,7 @@ class DataManager(object):
 
     def properties_uri(self,
             route):
+        route = route.lstrip("/")
         return "http://{}:{}/{}".format(
             self.config["EMIS_PROPERTY_HOST"],
             self.config["EMIS_PROPERTY_PORT"],
@@ -41,7 +42,7 @@ class DataManager(object):
 
         except Exception as exception:
 
-            sys.stderr.write("{}\n".format(traceback.format_exc(exception)));
+            sys.stderr.write("{}\n".format(traceback.format_exc()))
             sys.stderr.flush()
 
 
