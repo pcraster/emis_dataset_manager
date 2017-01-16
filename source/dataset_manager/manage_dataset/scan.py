@@ -47,7 +47,17 @@ def scan_phenomena_for_properties(
 
             for property_name in properties_.names:
                 property = properties_[property_name]
-                property_pathnames.append(property.id.pathname)
+
+                # HACK
+                # Filter out properties that contain discretization information.
+                # /lue_phenomena/discretization/lue_property_sets/shape/lue_properties/space
+                pathname = property.id.pathname
+                if pathname.find("discretization") == -1 and \
+                    pathname.find("shape") == -1 and \
+                    pathname.find("space") == -1:
+                    # /HACK
+
+                    property_pathnames.append(property.id.pathname)
 
     return property_pathnames
 
