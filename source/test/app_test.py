@@ -1,5 +1,5 @@
 import unittest
-from dataset_manager import create_app
+from emis_dataset_manager import create_app
 
 
 class AppTest(unittest.TestCase):

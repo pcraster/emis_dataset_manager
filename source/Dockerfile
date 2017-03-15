@@ -35,8 +35,8 @@ RUN pip install \
 
 ENV LD_LIBRARY_PATH=/usr/local/linux/linux/gcc-4/x86_64/lib:$LD_LIBRARY_PATH
 
-COPY cmd.sh server.py server_development.py server_production.py /
-COPY dataset_manager /dataset_manager
+COPY cmd.sh server.py /
+COPY emis_dataset_manager /emis_dataset_manager
 COPY test /test
 
 CMD ["/cmd.sh"]

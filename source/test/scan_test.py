@@ -1,6 +1,6 @@
 import copy
 import unittest
-from dataset_manager.manage_dataset.scan import Property, rewrite_pathnames
+from emis_dataset_manager.manage_dataset.scan import Property, rewrite_pathnames
 
 
 class ScanTest(unittest.TestCase):
